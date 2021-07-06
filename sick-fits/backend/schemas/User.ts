@@ -6,7 +6,7 @@ export const User = list({
   // ui
   fields: {
     name: text({ isRequired: true }),
-    emai: text({ isRequired: true, isUnique: true }),
+    email: text({ isRequired: true, isUnique: true }),
     password: password(),
     // add roles, cart and orders
   },
