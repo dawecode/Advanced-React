@@ -16,7 +16,7 @@ export default function useForm(initial = {}) {
       //copy the existing state
       ...inputs,
 
-      [name]: e.target.value,
+      [name]:value,
     });
   }
 
@@ -26,7 +26,8 @@ export default function useForm(initial = {}) {
   function clearForm() {
     const blankState = Object.fromEntries(
       Object.entries(inputs).map(([key,value]) => 
-      [key,""])); 
+      [key,""])
+      ); 
       setInputs(blankState)
   }
   //returns the things we want to surface from this custom hooks
