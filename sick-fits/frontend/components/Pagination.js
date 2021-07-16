@@ -6,7 +6,7 @@ import { useQuery } from "@apollo/client";
 import DisplayError from "./ErrorMessage";
 import { perPage } from "../config";
 
-const PAGINATION_QUERY = gql`
+export const PAGINATION_QUERY = gql`
   query PAGINATION_QUERY {
     _allProductsMeta {
       count
@@ -22,7 +22,7 @@ export default function Pagination({ page }) {
   return (
     <PaginationStyles>
       <Head>
-        <title>Sick Fits - Page {page} of ___ </title>
+        <title>Sick Fits - Page {page} of {pageCount} </title>
       </Head>
       <Link href={`/products/${page - 1}`}>
         <a aria-disabled={page <= 1}>← Prev</a>

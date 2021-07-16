@@ -1,8 +1,8 @@
-import gql from "graphql-tag";
-import { useQuery, useMutation } from "@apollo/client";
-import Form from "./styles/Form";
-import DisplayError from "./ErrorMessage";
-import useForm from "../lib/useForm";
+import { useMutation, useQuery } from '@apollo/client';
+import gql from 'graphql-tag';
+import useForm from '../lib/useForm';
+import DisplayError from './ErrorMessage';
+import Form from './styles/Form';
 
 const SINGLE_PRODUCT_QUERY = gql`
   query SINGLE_PRODUCT_QUERY($id: ID!) {
@@ -35,45 +35,47 @@ const UPDATE_PRODUCT_MUTATION = gql`
 `;
 
 export default function UpdateProduct({ id }) {
+  // 1. We need to get the existing product
   const { data, error, loading } = useQuery(SINGLE_PRODUCT_QUERY, {
-    variables: {
-      id,
-    },
+    variables: { id },
   });
-
-
-
+  // 2. We need to get the mutation to update the product
   const [
     updateProduct,
     { data: updateData, error: updateError, loading: updateLoading },
   ] = useMutation(UPDATE_PRODUCT_MUTATION);
-
-  //create some state for the form inputs
-  const { inputs, handleChange, resetForm, clearForm } = useForm(data?.Product);
-  if (loading) return <p> Loading...</p>;
-
-  console.log(data);
+  // 2.5 Create some state for the form inputs:
+  const { inputs, handleChange, clearForm, resetForm } = useForm(
+    data?.Product || {
+      name: '',
+      description: '',
+      price: '',
+    }
+  );
+  console.log(inputs);
+  if (loading) return <p>loading...</p>;
+  // 3. We need the form to handle the updates
   return (
     <Form
       onSubmit={async (e) => {
         e.preventDefault();
-        const res = updateProduct({
+        const res = await updateProduct({
           variables: {
             id,
             name: inputs.name,
             description: inputs.description,
             price: inputs.price,
           },
-        });
+        }).catch(console.error);
         console.log(res);
-        // To do handle submit
-        // //submit imput fields do back end
-        //  const res = await createProduct();
-        //  clearForm();
-        // //go to that products page
+        // Submit the inputfields to the backend:
+        // TODO: Handle Submit!!!
+        // const res = await createProduct();
+        // clearForm();
+        // // Go to that product's page!
         // Router.push({
-        //   pathname:`/product/${res.data.createProduct.id}`
-        // })
+        //   pathname: `/product/${res.data.createProduct.id}`,
+        // });
       }}
     >
       <DisplayError error={error || updateError} />
@@ -95,12 +97,11 @@ export default function UpdateProduct({ id }) {
             type="number"
             id="price"
             name="price"
-            placeholder="Price"
+            placeholder="price"
             value={inputs.price}
             onChange={handleChange}
           />
         </label>
-
         <label htmlFor="description">
           Description
           <textarea
@@ -111,8 +112,10 @@ export default function UpdateProduct({ id }) {
             onChange={handleChange}
           />
         </label>
+
         <button type="submit">Update Product</button>
       </fieldset>
     </Form>
   );
 }
+
