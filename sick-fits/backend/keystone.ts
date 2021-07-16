@@ -11,7 +11,9 @@ import {
   statelessSessions,
 } from "@keystone-next/keystone/session";
 import { sendPasswordResetEmail } from "./lib/mail";
-
+import { extendGraphqlSchema } from "./mutations";
+import { OrderItem } from "./schemas/OrderItem";
+import { Order } from "./schemas/Order";
 const databaseURL =
   process.env.DATABASE_URL || "mongodb://localhost/keystone-sick-fits-tutorial";
 
@@ -59,7 +61,10 @@ export default withAuth(
       Product,
       ProductImage,
       CartItem,
+      OrderItem,
+      Order,
     }),
+    extendGraphqlSchema: extendGraphqlSchema,
     ui: {
       //show the ui only for people who pass this test
       isAccessAllowed: ({ session }) => {
