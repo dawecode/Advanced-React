@@ -1,8 +1,10 @@
-
+import PleaseSignIn from "../components/PleaseSignIn"
 import CreateProduct from '../components/CreateProduct'
 
 export default function SellPage() {
   return ( <div>
-    <CreateProduct />
+    <PleaseSignIn>
+      <CreateProduct />
+    </PleaseSignIn>
   </div>)
 }
